@@ -77,7 +77,8 @@ void drawBoardGame(SnakeGame* snakeGame)
         for (countX = 0; countX < gameSizeX; countX++)
         {
             getBoardItemSpace = checkItemOnSpace(snakeGame, countX, countY); //Verifica qual item está ocupando aquele espaço e em seguida desenha ele na drawObject
-            if(getBoardItemSpace >= 0) drawObject(getBoardItemSpace);
+            //if(getBoardItemSpace >= 0)
+             drawObject(getBoardItemSpace);
         }
         printf("\n");
     }
@@ -169,19 +170,25 @@ SnakeGame* simuleSnake(SnakeGame* snakeGame, const Direction snakeDirection)
 //void getDownCollision()
 //void getLeftCollision()
 
-void getRightCollision(SnakeGame* snakeGame, const Direction snakeDirection)
+void getCollision(SnakeGame* snakeGame, const Direction snakeDirection)
 {
-    int posX = snakeGame->gameSizeX;
-    int posY = snakeGame->gameSizeY;
-    int count;
-    for(count = posX; count < posX*posY; count+= posX){
+    const int posX = snakeGame->gameSizeX;
+    const int posY = snakeGame->gameSizeY;
 
+    int count;
+    for(count = posX; count < posX * posY; count+= posX){
+        if (snakeGame->snake[0] == count){
+            printf("\nCOLISÃO!!\n");
+
+        }
     }
 }
 
 int moveSnakeToPosition(SnakeGame* snakeGame, const Direction snakeDirection)
 {
     int snakeSize = sizeof(snakeGame->snake) / sizeof(int);
+
+    //getCollision(snakeGame, snakeDirection);
 
     int count;
     for(count = snakeSize-1; count > 0; count--){
