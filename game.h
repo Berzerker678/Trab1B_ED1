@@ -12,41 +12,47 @@
 #define CHAR_OBS    88
 
 
-enum SNAKE
+typedef enum SnakeObject
 {
     HEAD = 1,
     BODY,
     TAIL,
     OBSTACLE
-};
+} SnakeObject;
 
-enum MOVE
+typedef enum Direction
 {
     UP = 1,
     DOWN,
     LEFT,
     RIGHT
-};
+} Direction;
 
-typedef struct Game
+typedef struct SnakeGame
 {
-    int OBSTACLES[OBS_MAX];
-    int SNAKE[SNAKE_MAX_SIZE];
-    int TAB_SIZEX;
-    int TAB_SIZEY;
-} GAME_SNAKE;
+    int obstacles[OBS_MAX];
+    int snake[SNAKE_MAX_SIZE];
+    int gameSizeX;
+    int gameSizeY;
+} SnakeGame;
 
-void init_snake(GAME_SNAKE *GM, int x, int y);
-void init_obstacles(GAME_SNAKE * GM);
-void draw_objects(int part);
-void draw_board(GAME_SNAKE *GM);
-void move_snake(GAME_SNAKE * GM,int move);
-void set_board_size(GAME_SNAKE * GM, int sizeX, int sizeY);
-void set_obstacle(GAME_SNAKE * GM, int x, int y);
-int check_space(GAME_SNAKE *GM,int x, int y);
-int get_real_pos(GAME_SNAKE * GM, int x, int y);
-int check_pos_snake(GAME_SNAKE * GM, int x, int y);
-int check_pos_obstacles(GAME_SNAKE * GM, int x, int y);
+
+
+void initItemSnake(SnakeGame *snakeGame, const int boardX, const int boardY);
+void initItemObstacle(SnakeGame *snakeGame);
+void setBoardSize(SnakeGame* snakeGame, const int boardX, const int boardY);
+
+void setBoardObstacle(SnakeGame* snakeGame, const int boardX, const int boardY);
+
+void drawObject(const SnakeObject part);
+void drawBoardGame(SnakeGame* snakeGame);
+
+void moveSnakeToPosition(SnakeGame* snakeGame, const Direction direction);
+int getRealBoardPosition(SnakeGame * snakeGame, const int boardX, const int boardY);
+int checkObstaclePosition(SnakeGame * snakeGame, const int boardX, const int boardY);
+int checkPieceSnake(SnakeGame * snakeGame, const int boardX, const int boardY);
+int checkItemOnSpace(SnakeGame *snakeGame,const int boardX, const int boardY);
+
 
 
 

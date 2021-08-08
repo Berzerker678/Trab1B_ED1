@@ -2,111 +2,117 @@
 #include "game.h"
 
 
-void init_obstacles(GAME_SNAKE * GM)
+void initItemObstacle(SnakeGame *snakeGame)
 {
-    int i;
-    for(i=0;i<sizeof(GM->OBSTACLES) / sizeof(int);i++)
-      GM->OBSTACLES[i] = -1;
+    const int obstaclesLength = sizeof(snakeGame->obstacles) / sizeof(int);
+    int count;
+    for(count = 0; count < obstaclesLength; count++)
+    {
+        snakeGame->obstacles[count] = -1;
+    }
 }
 
 
-void set_obstacle(GAME_SNAKE * GM, int x, int y)
+void initItemSnake(SnakeGame *snakeGame, const int boardX, const int boardY)
 {
-    int i;
-    int get_pos =  get_real_pos(GM, x, y);
-    if (get_pos > (GM->TAB_SIZEX * GM->TAB_SIZEY) || get_pos < 0) return;
+    const int snakeSize = sizeof(snakeGame->snake) / sizeof(int);
+    int count;
+    for(count = 0; count < snakeSize; count++)
+        snakeGame->snake[count] = getRealBoardPosition(snakeGame, boardX, boardY);
+}
 
-    for (i=0; i< sizeof(GM->OBSTACLES) / sizeof(int); i++)
+
+void setBoardSize(SnakeGame* snakeGame, const int boardX, const int boardY)
+{
+    snakeGame->gameSizeX = boardX;
+    snakeGame->gameSizeY = boardY;
+}
+
+
+void setBoardObstacle(SnakeGame* snakeGame, const int boardX, const int boardY)
+{
+    const int obstaclePosition = getRealBoardPosition(snakeGame, boardX, boardY);
+    const int obstacleSize = sizeof(snakeGame->obstacles) / sizeof(int);
+
+    if (obstaclePosition > (snakeGame->gameSizeX * snakeGame->gameSizeY) || obstaclePosition < 0) return;
+
+
+    int count;
+    for (count=0; count< obstacleSize; count++)
     {
-        if (GM->OBSTACLES[i] < 0)
+        if (snakeGame->obstacles[count] < 0)
         {
-            GM->OBSTACLES[i] = get_pos;
+            snakeGame->obstacles[count] = obstaclePosition;
             return;
         }
     }
 }
 
 
-void set_board_size(GAME_SNAKE * GM, int sizeX, int sizeY)
+void drawBoardGame(SnakeGame* snakeGame)
 {
-    GM->TAB_SIZEX = sizeX;
-    GM->TAB_SIZEY = sizeY;
-}
-
-
-//Determina a posição que a snake vai nascer.
-void init_snake(GAME_SNAKE *GM, int x, int y)
-{
-    int i;
-    for(i = 0; i < sizeof(GM->SNAKE) / sizeof(int); i++)
-        GM->SNAKE[i] = get_real_pos(GM, x, y);;
-}
-
-
-//Desenha o tabuleiro na tela com verificação de posicionamento da snake no tabuleiro.
-void draw_board(GAME_SNAKE * GM)
-{
-    printf(" ******************************** SNAKE ******************************** \n");
+    printf(" ******************************** snake ******************************** \n");
     printf(" Trabalho: 1A | Estrutura de dados I\n");
     printf(" \n");
-    printf(" ******************************** SNAKE ******************************** \n");
+    printf(" ******************************** snake ******************************** \n");
 
-    int check;
-    int TabX = GM->TAB_SIZEX;    //Separei o X e o Y. Só para manter um padrão.
-    int TabY = GM->TAB_SIZEY;
+    int getBoardItemSpace;
+    const int gameSizeX = snakeGame->gameSizeX;
+    const int gameSizeY = snakeGame->gameSizeY;
 
     printf("   |");
-    for (int x=0; x < TabY; x++)
-        printf("%d|",x+1);
+
+    int count;
+    for (count=0; count < gameSizeY; count++)
+    {
+        printf("%d|",count + 1);
+    }
 
     printf("\n");
 
-    for(int y=0; y < TabY; y++)
+    int countX, countY;
+    for (countY = 0; countY < gameSizeY; countY++)
     {
-        printf("%2d |",y+1);
-        for(int x=0; x < TabX; x++)
+        printf("%2d |",countY+1);
+        for (countX = 0; countX < gameSizeX; countX++)
         {
-            check = check_space(GM,x, y);
-            draw_objects(check);
+            getBoardItemSpace = checkItemOnSpace(snakeGame, countX, countY); //Verifica qual item estÃ¡ ocupando aquele espaÃ§o e em seguida desenha ele na drawObject
+            drawObject(getBoardItemSpace);
         }
         printf("\n");
     }
-
 }
 
 
-//Faz uma verificação do posicionamento do tabuleiro e verifica qual é a parte da snake ou o obstaculo no local
-int check_space(GAME_SNAKE *GM,int x, int y)
+int checkItemOnSpace(SnakeGame *snakeGame,const int boardX, const int boardY)
 {
-    int part;
-    int PosX = x+1;
-    int PosY = y+1;
+    int charItem;
+    const int positionX = boardX+1;
+    const int positionY = boardY+1;
 
-    part = check_pos_obstacles(GM, PosX, PosY);
-    if (part >= 0) return part;
+    charItem = checkObstaclePosition(snakeGame, positionX, positionY);
+    if (charItem >= 0) return charItem;
 
-    part = check_pos_snake(GM, PosX, PosY);
-    if (part >= 0) return part;
-
+    charItem = checkPieceSnake(snakeGame, positionX, positionY);
+    if (charItem >= 0) return charItem;
 
     return -1;
 }
 
 
-int check_pos_snake(GAME_SNAKE * GM, int x, int y)
+int checkPieceSnake(SnakeGame * snakeGame, const int boardX, const int boardY)
 {
+    const int realPosition = getRealBoardPosition(snakeGame, boardX, boardY);
+    const int snakeSize    = sizeof(snakeGame->snake) / sizeof(int);
 
-    int i;
-    int get_pos = get_real_pos(GM, x, y);
-    int snake_s = sizeof(GM->SNAKE) / sizeof(int);
-
-    for (i = 0; i < snake_s; i++)
+    int count;
+    for (count = 0; count < snakeSize; count++)
     {
-        if (get_pos == GM->SNAKE[i])
+        if (realPosition == snakeGame->snake[count])
         {
-            if(i == 0) return HEAD;
-            if(i > 0 && i < snake_s-1) return BODY;
-            if(i == snake_s-1) return TAIL;
+            if(count == 0) return HEAD;
+            if(count  > 0 && count < snakeSize - 1) return BODY;
+            if(count == snakeSize - 1) return TAIL;
         }
     }
 
@@ -114,20 +120,20 @@ int check_pos_snake(GAME_SNAKE * GM, int x, int y)
 }
 
 
-int check_pos_obstacles(GAME_SNAKE * GM, int x, int y)
+int checkObstaclePosition(SnakeGame * snakeGame, const int boardX, const int boardY)
 {
-    int i;
-    int get_pos = get_real_pos(GM, x, y);
-    int obs_s = sizeof(GM->OBSTACLES) / sizeof(int);
+    int count;
+    const int realPosition = getRealBoardPosition(snakeGame, boardX, boardY);
+    const int obstacleSize = sizeof(snakeGame->obstacles) / sizeof(int);
 
-    for (i = 0; i < obs_s; i++)
-        if (get_pos == GM->OBSTACLES[i]) return OBSTACLE;
+    for (count = 0; count < obstacleSize; count++)
+        if (realPosition == snakeGame->obstacles[count]) return OBSTACLE;
 
     return -1;
 }
 
-//Desenha no tabuleiro o caractere de acordo com a parte da snake (cabeça, corpo, calda)
-void draw_objects(int part)
+
+void drawObject(const SnakeObject part)
 {
     switch (part)
     {
@@ -148,45 +154,44 @@ void draw_objects(int part)
     }
 }
 /*
-void simular_snake(GAME_SNAKE * GM, int Move)
+void simular_snake(SnakeGame * snakeGame, int Move)
 {
-    GAME_SNAKE * FK = GM;
+    SnakeGame * FK = snakeGame;
 
 
 
 }*/
 
-//Movimenta a snake no tabuleiro (Não existe colisão de movimento)
-void move_snake(GAME_SNAKE * GM,int move)
+
+void moveSnakeToPosition(SnakeGame* snakeGame, const Direction snakeDirection)
 {
-    int i;
-    int snake_s = sizeof(GM->SNAKE) / sizeof(int);
+    int snakeSize = sizeof(snakeGame->snake) / sizeof(int);
 
-    //Criar aqui a verificação de movimentação
-
-    for(i = snake_s-1; i > 0; i--)        //Movimenta todo corpo após a cabeça
-        GM->SNAKE[i] = GM->SNAKE[i-1];
-
-    switch (move)                         //Movimenta a cabeça
+    int count;
+    for(count = snakeSize-1; count > 0; count--)
     {
-    case UP:    //cima
-        GM->SNAKE[0] -= GM->TAB_SIZEX;
+        snakeGame->snake[count] = snakeGame->snake[count-1];
+    }
+
+    switch (snakeDirection)
+    {
+    case UP:
+        snakeGame->snake[0] -= snakeGame->gameSizeX;
         break;
-    case RIGHT: //direita
-        GM->SNAKE[0] = GM->SNAKE[0] + 1;
+    case RIGHT:
+        snakeGame->snake[0] = snakeGame->snake[0] + 1;
         break;
-    case DOWN:  //baixo
-        GM->SNAKE[0] += GM->TAB_SIZEX;
+    case DOWN:
+        snakeGame->snake[0] += snakeGame->gameSizeX;
         break;
-    case LEFT:  //esquerda
-        GM->SNAKE[0] = GM->SNAKE[0] - 1;
+    case LEFT:
+        snakeGame->snake[0] = snakeGame->snake[0] - 1;
         break;
     }
 }
 
 
-
-int get_real_pos(GAME_SNAKE * GM, int x, int y)
+int getRealBoardPosition(SnakeGame * snakeGame, const int boardX, const int boardY)
 {
-    return (y * GM->TAB_SIZEX) - (GM->TAB_SIZEX - x);
+    return (boardY * snakeGame->gameSizeX) - (snakeGame->gameSizeX - boardX);
 }
