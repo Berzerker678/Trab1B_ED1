@@ -77,7 +77,7 @@ void drawBoardGame(SnakeGame* snakeGame)
         for (countX = 0; countX < gameSizeX; countX++)
         {
             getBoardItemSpace = checkItemOnSpace(snakeGame, countX, countY); //Verifica qual item está ocupando aquele espaço e em seguida desenha ele na drawObject
-            drawObject(getBoardItemSpace);
+            if(getBoardItemSpace >= 0) drawObject(getBoardItemSpace);
         }
         printf("\n");
     }
@@ -122,10 +122,10 @@ int checkPieceSnake(SnakeGame * snakeGame, const int boardX, const int boardY)
 
 int checkObstaclePosition(SnakeGame * snakeGame, const int boardX, const int boardY)
 {
-    int count;
     const int realPosition = getRealBoardPosition(snakeGame, boardX, boardY);
     const int obstacleSize = sizeof(snakeGame->obstacles) / sizeof(int);
 
+    int count;
     for (count = 0; count < obstacleSize; count++)
         if (realPosition == snakeGame->obstacles[count]) return OBSTACLE;
 
@@ -153,23 +153,38 @@ void drawObject(const SnakeObject part)
         printf("%c|", CHAR_SPACE);
     }
 }
+
 /*
-void simular_snake(SnakeGame * snakeGame, int Move)
+SnakeGame* simuleSnake(SnakeGame* snakeGame, const Direction snakeDirection)
 {
     SnakeGame * FK = snakeGame;
 
 
+    moveSnakeToPosition(SnakeGame, snakeDirection);
 
-}*/
+    return FK;
+}
+*/
+//void getUpCollision()
+//void getDownCollision()
+//void getLeftCollision()
 
+void getRightCollision(SnakeGame* snakeGame, const Direction snakeDirection)
+{
+    int posX = snakeGame->gameSizeX;
+    int posY = snakeGame->gameSizeY;
+    int count;
+    for(count = posX; count < posX*posY; count+= posX){
 
-void moveSnakeToPosition(SnakeGame* snakeGame, const Direction snakeDirection)
+    }
+}
+
+int moveSnakeToPosition(SnakeGame* snakeGame, const Direction snakeDirection)
 {
     int snakeSize = sizeof(snakeGame->snake) / sizeof(int);
 
     int count;
-    for(count = snakeSize-1; count > 0; count--)
-    {
+    for(count = snakeSize-1; count > 0; count--){
         snakeGame->snake[count] = snakeGame->snake[count-1];
     }
 
@@ -188,6 +203,7 @@ void moveSnakeToPosition(SnakeGame* snakeGame, const Direction snakeDirection)
         snakeGame->snake[0] = snakeGame->snake[0] - 1;
         break;
     }
+    return 0;
 }
 
 

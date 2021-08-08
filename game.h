@@ -47,7 +47,7 @@ void setBoardObstacle(SnakeGame* snakeGame, const int boardX, const int boardY);
 void drawObject(const SnakeObject part);
 void drawBoardGame(SnakeGame* snakeGame);
 
-void moveSnakeToPosition(SnakeGame* snakeGame, const Direction direction);
+int moveSnakeToPosition(SnakeGame* snakeGame, const Direction direction);
 int getRealBoardPosition(SnakeGame * snakeGame, const int boardX, const int boardY);
 int checkObstaclePosition(SnakeGame * snakeGame, const int boardX, const int boardY);
 int checkPieceSnake(SnakeGame * snakeGame, const int boardX, const int boardY);
