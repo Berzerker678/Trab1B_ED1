@@ -17,34 +17,23 @@ int main()
 
     setBoardSize(SnakeGame, 10, 10);
     initItemObstacle(SnakeGame);
-    initItemSnake(SnakeGame, 5, 5);
 
-    setBoardObstacle(SnakeGame, 3, 3);
+    initItemSnake(SnakeGame);
+    setSnakeToPosition(SnakeGame, 5, 5);
+
+    setBoardObstacle(SnakeGame, 8, 5);
+    setBoardObstacle(SnakeGame, 9, 5);
+    setBoardObstacle(SnakeGame, 10, 5);
+    setBoardObstacle(SnakeGame, 10, 6);
+    setBoardObstacle(SnakeGame, 10, 7);
 
     drawBoardGame(SnakeGame);
-    moveSnakeToPosition(SnakeGame, DOWN);
-    drawBoardGame(SnakeGame);
-    moveSnakeToPosition(SnakeGame, DOWN);
-    drawBoardGame(SnakeGame);
-    moveSnakeToPosition(SnakeGame, DOWN);
-    drawBoardGame(SnakeGame);
-    moveSnakeToPosition(SnakeGame, DOWN);
-    drawBoardGame(SnakeGame);
     moveSnakeToPosition(SnakeGame, RIGHT);
     drawBoardGame(SnakeGame);
     moveSnakeToPosition(SnakeGame, RIGHT);
     drawBoardGame(SnakeGame);
     moveSnakeToPosition(SnakeGame, RIGHT);
     drawBoardGame(SnakeGame);
-    moveSnakeToPosition(SnakeGame, UP);
-    drawBoardGame(SnakeGame);
-    moveSnakeToPosition(SnakeGame, UP);
-    drawBoardGame(SnakeGame);
-    moveSnakeToPosition(SnakeGame, UP);
-    drawBoardGame(SnakeGame);
-    moveSnakeToPosition(SnakeGame, RIGHT);
-    drawBoardGame(SnakeGame);
-
 
     return 0;
 }
