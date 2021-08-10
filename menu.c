@@ -122,7 +122,7 @@ void choiceObstacleItems(SnakeGame* snakeGame)
                " Digite a posição X e Y para o obstaculo: ");
 
         scanf("%d %d", &choice1, &choice2);
-        if ((choice1 < sizeBoardX && choice1 > 0) && (choice2 < sizeBoardY && choice2 > 0))
+        if ((choice1 <= sizeBoardX && choice1 > 0) && (choice2 <= sizeBoardY && choice2 > 0))
         {
             if (choice1 != snakePositionX || choice2 != snakePositionY){
                 error = 0;
@@ -141,8 +141,6 @@ void choiceMenuSnakePosition(SnakeGame* snakeGame)
 {
     const int sizeBoardX = getBoardSizeX(snakeGame);
     const int sizeBoardY = getBoardSizeY(snakeGame);
-    const int snakePositionY = getSnakePositionY(snakeGame);
-    const int snakePositionX = getSnakePositionX(snakeGame);
 
     int choice1, choice2, error = 0;
 
@@ -170,10 +168,13 @@ void choiceMenuSnakePosition(SnakeGame* snakeGame)
                " Digite a posição X e Y para a minhoca: ");
 
         scanf("%d %d", &choice1, &choice2);
-        if (choice1 < sizeBoardX && choice1 > 0 && choice1 != snakePositionX)
+
+        if (choice1 <= sizeBoardX && choice1 > 0)
         {
-            if (choice2 < sizeBoardY && choice2 > 0 && choice2 != snakePositionY)
+
+            if (choice2 <= sizeBoardY && choice2 > 0)
             {
+
 
                 if (checkObstacleOnPosition(snakeGame,  choice1, choice2) == 0)
                 {

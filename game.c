@@ -45,8 +45,10 @@ void setSnakeToPosition(SnakeGame *snakeGame, const int boardX, const int boardY
 {
     const int snakeSize = sizeof(snakeGame->snake) / sizeof(int);
     int count;
-    for(count = 0; count < snakeSize; count++)
+    for(count = 0; count < snakeSize; count++){
         snakeGame->snake[count] = getRealBoardPosition(snakeGame, boardX, boardY);
+    }
+
 }
 
 
@@ -184,8 +186,9 @@ void simuleSnake(SnakeGame* snakeGame, const int randomMovAmounts)
     int struckCount = 0;
 
     while(count < randomMovAmounts){
-        cleamMenu();
+
         if (moveSnakeToPosition(snakeGame, randomWalk()) == 0){
+            cleamMenu();
             drawBoardGame(snakeGame);
             sleep(2);
             count += 1;
@@ -211,7 +214,7 @@ int wallCollision(SnakeGame* snakeGame, const Direction snakeDirection)
     case UP:
         for(count = 0; count < posX; count++)
         {
-            if (snakeGame->snake[0] == count) return 1;
+            if (snakeGame->snake[0] == count+1) return 1;
         }
         break;
     case RIGHT:
