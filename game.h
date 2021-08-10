@@ -4,14 +4,15 @@
 #define SNAKE_MAX_SIZE 5
 #define OBS_MAX 100
 
-//ASCII
-#define CHAR_TAIL   176
+//ASCII - Caracteres utilizados para montar os objetos do jogo.
+#define CHAR_TAIL   176     //o
 #define CHAR_SPACE  ' '
 #define CHAR_BODY   '*'
 #define CHAR_HEAD   'c'
 #define CHAR_OBS    'x'
 
 
+// Objetos do jogo, corpo, cauda, corpo e obstaculos
 typedef enum SnakeObject
 {
     HEAD = 1,
@@ -20,6 +21,7 @@ typedef enum SnakeObject
     OBSTACLE
 } SnakeObject;
 
+// Um enum montado para definir o movimento CIMA, BAIXO, ESQUERDA e DIREITA da minhoca.
 typedef enum Direction
 {
     UP = 1,
@@ -29,6 +31,8 @@ typedef enum Direction
     DIRECTION_NUMBER = 4
 } Direction;
 
+
+// A estrutura principal do programa, onde será utilizada guardar as posições dos obstaculos, as posições da minhoca e o tamanho X e Y do tabuleiro.
 typedef struct SnakeGame
 {
     int obstacles[OBS_MAX];
@@ -37,15 +41,6 @@ typedef struct SnakeGame
     int gameSizeY;
 } SnakeGame;
 
-
-int checkObstacleOnPosition(SnakeGame *snakeGame,  const int positionX, const int positionY);
-int randomWalk();
-int getBoardSizeY(SnakeGame* snakeGame);
-int getBoardSizeX(SnakeGame* snakeGame);
-int getSnakePositionX(SnakeGame* snakeGame);
-int getSnakePositionY(SnakeGame* snakeGame);
-
-int simuleSnake(SnakeGame* snakeGame, const int randomMovAmounts);
 
 // Inicia a snake atribuindo a posição dela no Board.
 // a posição selecionada será o ponto inicial da snake acompanhada do seu corpo no mesmo ponto da matriz.
@@ -107,5 +102,25 @@ int bodyCollision(SnakeGame* snakeGame, const Direction snakeDirection);
 // Verifica se a Snake colidiu contra alguma parede.
 int wallCollision(SnakeGame* snakeGame, const Direction snakeDirection);
 
+// Verifica se existe um obstaculo na posição X / Y selecionada
+int checkObstacleOnPosition(SnakeGame *snakeGame,  const int positionX, const int positionY);
+
+// Gera um valor random para se movimentar UP/DOWN/LEFT/RIGHT
+int randomWalk();
+
+//Retorna o tamanho X do tabuleiro
+int getBoardSizeY(SnakeGame* snakeGame);
+
+// Retorna o tamanho Y do tabuleiro
+int getBoardSizeX(SnakeGame* snakeGame);
+
+// Retorna a posição X onde a minhoca está
+int getSnakePositionX(SnakeGame* snakeGame);
+
+// Retorna a posição Y onde a minhoca está
+int getSnakePositionY(SnakeGame* snakeGame);
+
+// Simula N movimentos aleatórios da minhoca.
+int simuleSnake(SnakeGame* snakeGame, const int randomMovAmounts);
 
 #endif // GAME_H_INCLUDED
