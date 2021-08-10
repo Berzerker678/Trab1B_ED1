@@ -1,21 +1,28 @@
 # depslib dependency file v1.0
-1628449109 source:d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\game.c
+1628593734 source:d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\game.c
 	<stdio.h>
+	<stdlib.h>
+	<unistd.h>
 	"game.h"
+	"menu.h"
 
-1628410914 source:d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\main.c
+1628586649 source:d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\main.c
 	<stdio.h>
 	<stdlib.h>
 	<locale.h>
 	<string.h>
+	<time.h>
 	"game.h"
 	"menu.h"
 
-1628398323 d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\menu.h
+1628593609 d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\menu.h
+	"game.h"
 
-1628449571 d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\game.h
+1628593701 d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\game.h
 
-1628398318 source:d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\menu.c
+1628593677 source:d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\menu.c
 	"menu.h"
+	"game.h"
 	<stdio.h>
+	<stdlib.h>
 

@@ -1,5 +1,23 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
 #include "game.h"
+#include "menu.h"
+
+int checkObstacleOnPosition(SnakeGame *snakeGame,  const int positionX, const int positionY)
+{
+    const int obstaclesLength = sizeof(snakeGame->obstacles) / sizeof(int);
+    const int realPosition = getRealBoardPosition(snakeGame, positionX, positionY);
+
+    int count;
+    for (count = 0; count < obstaclesLength; count++){
+        if (snakeGame->obstacles[count] == realPosition){
+            return 1;
+        }
+    }
+    return 0;
+}
 
 
 void initItemObstacle(SnakeGame *snakeGame)
@@ -12,8 +30,18 @@ void initItemObstacle(SnakeGame *snakeGame)
     }
 }
 
+void initItemSnake(SnakeGame *snakeGame)
+{
+    const int snakeLength = sizeof(snakeGame->snake) / sizeof(int);
+    int count;
+    for(count = 0; count < snakeLength; count++)
+    {
+        snakeGame->snake[count] = -1;
+    }
+}
 
-void initItemSnake(SnakeGame *snakeGame, const int boardX, const int boardY)
+
+void setSnakeToPosition(SnakeGame *snakeGame, const int boardX, const int boardY)
 {
     const int snakeSize = sizeof(snakeGame->snake) / sizeof(int);
     int count;
@@ -51,11 +79,6 @@ void setBoardObstacle(SnakeGame* snakeGame, const int boardX, const int boardY)
 
 void drawBoardGame(SnakeGame* snakeGame)
 {
-    printf(" ******************************** snake ******************************** \n");
-    printf(" Trabalho: 1A | Estrutura de dados I\n");
-    printf(" \n");
-    printf(" ******************************** snake ******************************** \n");
-
     int getBoardItemSpace;
     const int gameSizeX = snakeGame->gameSizeX;
     const int gameSizeY = snakeGame->gameSizeY;
@@ -76,32 +99,31 @@ void drawBoardGame(SnakeGame* snakeGame)
         printf("%2d |",countY+1);
         for (countX = 0; countX < gameSizeX; countX++)
         {
-            getBoardItemSpace = checkItemOnSpace(snakeGame, countX, countY); //Verifica qual item está ocupando aquele espaço e em seguida desenha ele na drawObject
-            //if(getBoardItemSpace >= 0)
-             drawObject(getBoardItemSpace);
+            getBoardItemSpace = charItemOnSpace(snakeGame, countX, countY);
+            drawObject(getBoardItemSpace); //if(getBoardItemSpace >= 0)
         }
         printf("\n");
     }
 }
 
 
-int checkItemOnSpace(SnakeGame *snakeGame,const int boardX, const int boardY)
+int charItemOnSpace(SnakeGame *snakeGame,const int boardX, const int boardY)
 {
     int charItem;
     const int positionX = boardX+1;
     const int positionY = boardY+1;
 
-    charItem = checkObstaclePosition(snakeGame, positionX, positionY);
+    charItem = charObstaclePosition(snakeGame, positionX, positionY);
     if (charItem >= 0) return charItem;
 
-    charItem = checkPieceSnake(snakeGame, positionX, positionY);
+    charItem = charPieceSnake(snakeGame, positionX, positionY);
     if (charItem >= 0) return charItem;
 
     return -1;
 }
 
 
-int checkPieceSnake(SnakeGame * snakeGame, const int boardX, const int boardY)
+int charPieceSnake(SnakeGame * snakeGame, const int boardX, const int boardY)
 {
     const int realPosition = getRealBoardPosition(snakeGame, boardX, boardY);
     const int snakeSize    = sizeof(snakeGame->snake) / sizeof(int);
@@ -121,10 +143,10 @@ int checkPieceSnake(SnakeGame * snakeGame, const int boardX, const int boardY)
 }
 
 
-int checkObstaclePosition(SnakeGame * snakeGame, const int boardX, const int boardY)
+int charObstaclePosition(SnakeGame * snakeGame, const int boardX, const int boardY)
 {
     const int realPosition = getRealBoardPosition(snakeGame, boardX, boardY);
-    const int obstacleSize = sizeof(snakeGame->obstacles) / sizeof(int);
+    const int obstacleSize = amountOfObstacles(snakeGame);
 
     int count;
     for (count = 0; count < obstacleSize; count++)
@@ -155,43 +177,155 @@ void drawObject(const SnakeObject part)
     }
 }
 
-/*
-SnakeGame* simuleSnake(SnakeGame* snakeGame, const Direction snakeDirection)
+
+void simuleSnake(SnakeGame* snakeGame, const int randomMovAmounts)
 {
-    SnakeGame * FK = snakeGame;
+    int count = 0;
+    int struckCount = 0;
 
+    while(count < randomMovAmounts){
+        cleamMenu();
+        if (moveSnakeToPosition(snakeGame, randomWalk()) == 0){
+            drawBoardGame(snakeGame);
+            sleep(2);
+            count += 1;
+            struckCount = 0;
+        }
+        struckCount += 1;
+        if(struckCount >= 100) return;
+    }
 
-    moveSnakeToPosition(SnakeGame, snakeDirection);
-
-    return FK;
+    return;
 }
-*/
-//void getUpCollision()
-//void getDownCollision()
-//void getLeftCollision()
 
-void getCollision(SnakeGame* snakeGame, const Direction snakeDirection)
+
+int wallCollision(SnakeGame* snakeGame, const Direction snakeDirection)
 {
     const int posX = snakeGame->gameSizeX;
     const int posY = snakeGame->gameSizeY;
 
     int count;
-    for(count = posX; count < posX * posY; count+= posX){
-        if (snakeGame->snake[0] == count){
-            printf("\nCOLISÃO!!\n");
 
+    switch (snakeDirection)
+    {
+    case UP:
+        for(count = 0; count < posX; count++)
+        {
+            if (snakeGame->snake[0] == count) return 1;
+        }
+        break;
+    case RIGHT:
+        for(count = posX; count < posX * posY; count+= posX)
+        {
+            if (snakeGame->snake[0] == count) return 1;
+        }
+        break;
+    case DOWN:
+        for(count = posX*posY - (posX-1); count < posY*posX; count++)
+        {
+            if (snakeGame->snake[0] == count) return 1;
+        }
+        break;
+    case LEFT:
+        for(count = 0; count < posX*posY - (posX-1); count+= posX)
+        {
+            if (snakeGame->snake[0] == count + 1)   return 1;
+        }
+        break;
+    }
+
+    return 0;
+}
+
+
+int bodyCollision(SnakeGame* snakeGame, const Direction snakeDirection)
+{
+    const int destiniUp   = snakeGame->snake[0] - snakeGame->gameSizeX;
+    const int destiniDown = snakeGame->snake[0] + snakeGame->gameSizeX;
+    const int destiniLeft = snakeGame->snake[0] - 1;
+    const int destiniRight= snakeGame->snake[0] + 1;
+
+    const int snakeSize = sizeof(snakeGame->snake) / sizeof(int);
+
+    int count, snakeBodyPosition;
+    for(count = 0; count < snakeSize; count++)
+    {
+        snakeBodyPosition = snakeGame->snake[count];
+
+        switch (snakeDirection)
+        {
+        case UP:
+            if (destiniUp   == snakeBodyPosition) return 1;
+            break;
+        case RIGHT:
+            if (destiniRight == snakeBodyPosition) return 1;
+            break;
+        case DOWN:
+            if (destiniDown == snakeBodyPosition) return 1;
+            break;
+        case LEFT:
+            if (destiniLeft == snakeBodyPosition) return 1;
+            break;
         }
     }
+
+    return 0;
 }
+
+
+int obstacleCollision(SnakeGame* snakeGame, const Direction snakeDirection)
+{
+    const int destiniUp   = snakeGame->snake[0] - snakeGame->gameSizeX;
+    const int destiniDown = snakeGame->snake[0] + snakeGame->gameSizeX;
+    const int destiniLeft = snakeGame->snake[0] - 1;
+    const int destiniRight= snakeGame->snake[0] + 1;
+
+    const int amountObstacles = amountOfObstacles(snakeGame);
+
+
+    int count, obstaclePosition;
+    for(count = 0; count < amountObstacles; count++)
+    {
+        obstaclePosition = snakeGame->obstacles[count];
+        switch (snakeDirection)
+        {
+        case UP:
+            if (destiniUp == obstaclePosition) return 1;
+            break;
+        case RIGHT:
+            if (destiniRight == obstaclePosition) return 1;
+            break;
+        case DOWN:
+            if (destiniDown == obstaclePosition) return 1;
+            break;
+        case LEFT:
+            if (destiniLeft == obstaclePosition) return 1;
+            break;
+        }
+    }
+
+    return 0;
+}
+
+int snakeCollided(SnakeGame* snakeGame, const Direction snakeDirection)
+{
+    if(obstacleCollision(snakeGame, snakeDirection) == 1) return -1; //Colidiou com o obstaculo
+    if(wallCollision(snakeGame, snakeDirection) == 1) return -2;     //Colidiou com a parede
+    if(bodyCollision(snakeGame, snakeDirection) == 1) return -3;     //Colidiou com o proprio corpo
+
+    return 0;
+}
+
 
 int moveSnakeToPosition(SnakeGame* snakeGame, const Direction snakeDirection)
 {
-    int snakeSize = sizeof(snakeGame->snake) / sizeof(int);
 
-    //getCollision(snakeGame, snakeDirection);
+    if (snakeCollided(snakeGame, snakeDirection) < 0) return -1;
+    const int snakeSize = sizeof(snakeGame->snake) / sizeof(int);
 
     int count;
-    for(count = snakeSize-1; count > 0; count--){
+    for(count = snakeSize-1; count > 0; count--)
+    {
         snakeGame->snake[count] = snakeGame->snake[count-1];
     }
 
@@ -218,3 +352,64 @@ int getRealBoardPosition(SnakeGame * snakeGame, const int boardX, const int boar
 {
     return (boardY * snakeGame->gameSizeX) - (snakeGame->gameSizeX - boardX);
 }
+
+int amountOfObstacles(SnakeGame* SnakeGame)
+{
+    int count = 0;
+    while(SnakeGame->obstacles[count] != -1)
+    {
+        count++;
+    }
+
+    return count;
+}
+
+
+int randomWalk()
+{
+    return rand()% (DIRECTION_NUMBER) + 1;
+}
+
+
+int getBoardSizeX(SnakeGame* snakeGame)
+{
+    return snakeGame->gameSizeX;
+}
+
+
+int getBoardSizeY(SnakeGame* snakeGame)
+{
+    return snakeGame->gameSizeY;
+}
+
+
+int getSnakePositionX(SnakeGame* snakeGame)
+{
+    const int snakeRealPosition = snakeGame->snake[0];
+    const int boardSizeX = getBoardSizeX(snakeGame);
+    const int snakePositionY = getSnakePositionY(snakeGame);
+
+    if (snakeRealPosition < 0) return -1;
+
+    return boardSizeX - ((snakePositionY * boardSizeX) - snakeRealPosition);
+}
+
+
+int getSnakePositionY(SnakeGame* snakeGame)
+{
+    int boardSizeX = getBoardSizeX(snakeGame);
+    int boardSizeY = getBoardSizeY(snakeGame);
+
+    int snakeRealPosition = snakeGame->snake[0];//55
+    if (snakeRealPosition < 0) return -1;
+
+    int count, countLine = 0;
+    for (count = 0; count < (boardSizeX * boardSizeY); count += boardSizeX, countLine++)
+    {
+        if (count > snakeRealPosition)
+            break;
+    }
+
+    return countLine;
+}
+

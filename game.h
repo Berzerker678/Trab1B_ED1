@@ -25,7 +25,8 @@ typedef enum Direction
     UP = 1,
     DOWN,
     LEFT,
-    RIGHT
+    RIGHT,
+    DIRECTION_NUMBER = 4
 } Direction;
 
 typedef struct SnakeGame
@@ -37,13 +38,22 @@ typedef struct SnakeGame
 } SnakeGame;
 
 
+int checkObstacleOnPosition(SnakeGame *snakeGame,  const int positionX, const int positionY);
+int randomWalk();
+int getBoardSizeY(SnakeGame* snakeGame);
+int getBoardSizeX(SnakeGame* snakeGame);
+int getSnakePositionX(SnakeGame* snakeGame);
+int getSnakePositionY(SnakeGame* snakeGame);
+
+void simuleSnake(SnakeGame* snakeGame, const int randomMovAmounts);
+
 // Inicia a snake atribuindo a posição dela no Board.
 // a posição selecionada será o ponto inicial da snake acompanhada do seu corpo no mesmo ponto da matriz.
 void setSnakeToPosition(SnakeGame *snakeGame, const int boardX, const int boardY);
 
 // Inicia os obstaculos atribuindo o valor '-1' para todas as posições do vetor obstaculos,
 // onde a quantidade máxima de posições é de 100, mas nem sempre será usado as 100 posições
-// então o valor '-1' será o identificador de que a posição do vetor obstacle não contém um obstaculo.
+// então o valor '-1' será o identificador de que a posição do vetor obstaclo não contém um obstaculo.
 void initItemObstacle(SnakeGame *snakeGame);
 
 // Inicia o Snake atribuindo o valor '-1' para todas as posições do vetor snake,
@@ -96,5 +106,6 @@ int bodyCollision(SnakeGame* snakeGame, const Direction snakeDirection);
 
 // Verifica se a Snake colidiu contra alguma parede.
 int wallCollision(SnakeGame* snakeGame, const Direction snakeDirection);
+
 
 #endif // GAME_H_INCLUDED
