@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1628597743 source:d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\game.c
+1628600682 source:d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\game.c
 	<stdio.h>
 	<stdlib.h>
 	<unistd.h>
@@ -15,14 +15,15 @@
 	"game.h"
 	"menu.h"
 
-1628593609 d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\menu.h
+1628601001 d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\menu.h
 	"game.h"
 
-1628593701 d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\game.h
+1628600740 d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\game.h
 
-1628597003 source:d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\menu.c
-	"menu.h"
-	"game.h"
+1628600870 source:d:\desktop\faculdade - aulas\estruturas de dados i - 2 (dilza)\trabalho1a\trab1a_ed1\menu.c
 	<stdio.h>
 	<stdlib.h>
+	<unistd.h>
+	"menu.h"
+	"game.h"
 

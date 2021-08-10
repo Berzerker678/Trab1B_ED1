@@ -6,9 +6,10 @@
 
 int choiceMenuItems();
 void choiceObstacleItems(SnakeGame* snakeGame);
+void choiceMenuSnakePosition(SnakeGame* snakeGame);
 void mainMenu(SnakeGame* snakeGame);
 void cleamMenu();
-void choiceMenuSnakePosition(SnakeGame* snakeGame);
-void choiceMenuSnakePosition(SnakeGame* snakeGame);
+void choiceMenuSimulator(SnakeGame* snakeGame);
+
 
 #endif // MENU_H_INCLUDED

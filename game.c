@@ -180,7 +180,7 @@ void drawObject(const SnakeObject part)
 }
 
 
-void simuleSnake(SnakeGame* snakeGame, const int randomMovAmounts)
+int simuleSnake(SnakeGame* snakeGame, const int randomMovAmounts)
 {
     int count = 0;
     int struckCount = 0;
@@ -195,10 +195,10 @@ void simuleSnake(SnakeGame* snakeGame, const int randomMovAmounts)
             struckCount = 0;
         }
         struckCount += 1;
-        if(struckCount >= 100) return;
+        if(struckCount >= 100) return -1;
     }
 
-    return;
+    return 0;
 }
 
 

@@ -45,7 +45,7 @@ int getBoardSizeX(SnakeGame* snakeGame);
 int getSnakePositionX(SnakeGame* snakeGame);
 int getSnakePositionY(SnakeGame* snakeGame);
 
-void simuleSnake(SnakeGame* snakeGame, const int randomMovAmounts);
+int simuleSnake(SnakeGame* snakeGame, const int randomMovAmounts);
 
 // Inicia a snake atribuindo a posição dela no Board.
 // a posição selecionada será o ponto inicial da snake acompanhada do seu corpo no mesmo ponto da matriz.
